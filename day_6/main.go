@@ -14,7 +14,6 @@ func main() {
 	log.Printf("Part 1: For given signal, start-of-packet marker was detected after %v characters", startOfPacketMarker)
 	startOfMessageMarker := identifyStartOfMarker(inputSignal, 14)
 	log.Printf("Part 2: For given signal, start-of-message marker was detected after %v characters", startOfMessageMarker)
-
 }
 
 /*
@@ -34,7 +33,6 @@ func identifyStartOfMarker(signal string, distChars int) int {
 			if len(characterSet) == distChars {
 				// Add distChars to get the index of the last character in the start-of-marker
 				startOfPacketMarker = i + distChars
-				println(string(characterGroup))
 			}
 		}
 	}
