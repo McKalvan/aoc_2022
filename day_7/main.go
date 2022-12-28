@@ -115,17 +115,6 @@ func (dir *Directory) CalculateSize() int {
 	return dirSize
 }
 
-func (dir *Directory) GetFullPath() string {
-	return dir.getFullPathHelper(dir.name)
-}
-
-func (dir *Directory) getFullPathHelper(accum string) string {
-	if dir.parentDirectory == nil {
-		return accum
-	}
-	return dir.parentDirectory.getFullPathHelper(fmt.Sprintf("%v/%v", dir.parentDirectory.name, accum))
-}
-
 /*
 Traverses directory structure and returns root directory - IE directory w/ no parent
 */
@@ -153,10 +142,6 @@ func (dir *Directory) DetermineSmallestEligibleDirSize(minSize int) int {
 
 func (dir *Directory) DetermineSmallestEligibleDirSizeHelper(minSize int, minObserved int) int {
 	dirSize := dir.CalculateSize()
-	if dirSize >= minSize {
-		println(dirSize, dir.name)
-
-	}
 	if dirSize >= minSize && dirSize < minObserved {
 		minObserved = dirSize
 	}
