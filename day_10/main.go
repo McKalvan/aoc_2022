@@ -32,17 +32,25 @@ func parseInputFile() CycleRegisterMap {
 	return parseProgram(lines)
 }
 
+/*
+Parses set of commands from input to CycleRegisterMap
+Commands in input are limited to addx and noop
+*/
 func parseProgram(cmds []string) CycleRegisterMap {
 	result := map[int]int{}
 	var currentCycle int
 	xRegister := 1
 
 	for _, cmd := range cmds {
+		// this handles noop and first cycle of addx
 		currentCycle++
 		result[currentCycle] = xRegister
+
 		if strings.HasPrefix(cmd, ADDX) {
+			// handles second cycle of addx
 			vStr := strings.Split(cmd, " ")[1]
 			v, _ := strconv.Atoi(vStr)
+
 			currentCycle++
 			result[currentCycle] = xRegister
 			xRegister += v
@@ -53,6 +61,9 @@ func parseProgram(cmds []string) CycleRegisterMap {
 
 type CycleRegisterMap map[int]int
 
+/*
+Sums the signal strengths (cycle * xRegister corresponding to cycle) of a given set of cycles
+*/
 func (cycleMap CycleRegisterMap) SumSignalStrengths(cycles ...int) int {
 	var result int
 	for _, cycle := range cycles {
@@ -61,6 +72,9 @@ func (cycleMap CycleRegisterMap) SumSignalStrengths(cycles ...int) int {
 	return result
 }
 
+/*
+Prints a sequence of capital letters based on info in cycleMap
+*/
 func PrintCRTOutput(cyclesPerRow int, cycleMap CycleRegisterMap) {
 	for cycle := 1; cycle <= len(cycleMap); cycle++ {
 		// update the currentWritePosition based on the current cycle and # of cycles per row
@@ -69,7 +83,7 @@ func PrintCRTOutput(cyclesPerRow int, cycleMap CycleRegisterMap) {
 		// update position of sprite based on xRegister val for current cycle
 		spritePosition := cycleMap[cycle]
 
-		// draw pixel in current position if visible in current cycle
+		// draw pixel in current position if visible in current cycle, EX w/in +/-1 of position being written
 		if math.Abs(float64(spritePosition-currentWritePosition)) <= 1 {
 			print(LIT_PIXEL)
 		} else {
